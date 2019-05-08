@@ -59,7 +59,7 @@ namespace Opsive.UltimateCharacterController.Game
             /// <summary>
             /// Restores the location back to the fixed location. This will be performed immediately before the object is moved within FixedUpdate.
             /// </summary>
-            public void RestoreFixedPosition()
+            public virtual void RestoreFixedLocation()
             {
                 m_Transform.position = m_SmoothPosition = m_FixedPosition;
                 m_Transform.rotation = m_SmoothRotation = m_FixedRotation;
@@ -68,7 +68,7 @@ namespace Opsive.UltimateCharacterController.Game
             /// <summary>
             /// Assigns the fixed location. This will be performed immediately after the object is moved within FixedUpdate.
             /// </summary>
-            public void AssignFixedPosition()
+            public virtual void AssignFixedLocation()
             {
                 m_FixedPosition = m_Transform.position;
                 m_FixedRotation = m_Transform.rotation;
@@ -78,7 +78,7 @@ namespace Opsive.UltimateCharacterController.Game
             /// Immediately set the object's position.
             /// </summary>
             /// <param name="position">The position of the object.</param>
-            public void SetPosition(Vector3 position)
+            public virtual void SetPosition(Vector3 position)
             {
                 m_Transform.position = m_FixedPosition = m_SmoothPosition = position;
             }
@@ -87,7 +87,7 @@ namespace Opsive.UltimateCharacterController.Game
             /// Immediately set the object's rotation.
             /// </summary>
             /// <param name="position">The rotation of the object.</param>
-            public void SetRotation(Quaternion rotation)
+            public virtual void SetRotation(Quaternion rotation)
             {
                 m_Transform.rotation = m_FixedRotation = m_SmoothRotation = rotation;
             }
@@ -100,6 +100,7 @@ namespace Opsive.UltimateCharacterController.Game
         {
             private UltimateCharacterLocomotion m_CharacterLocomotion;
             private UltimateCharacterLocomotionHandler m_CharacterHandler;
+            private SmoothFixedLocation[] m_SmoothedBones;
             private CameraController m_AttachedCamera;
             private float m_HorizontalMovement;
             private float m_ForwardMovement;
@@ -126,6 +127,15 @@ namespace Opsive.UltimateCharacterController.Game
                 // The class is pooled so reset any variables.
                 m_HorizontalMovement = m_ForwardMovement = m_DeltaYawRotation = 0;
                 Initialize(characterLocomotion.transform);
+
+                var smoothedBones = m_CharacterLocomotion.SmoothedBones;
+                if (smoothedBones != null && smoothedBones.Length > 0) {
+                    m_SmoothedBones = new SmoothFixedLocation[smoothedBones.Length];
+                    for (int i = 0; i < m_SmoothedBones.Length; ++i) {
+                        m_SmoothedBones[i] = ObjectPool.Get<SmoothFixedLocation>();
+                        m_SmoothedBones[i].Initialize(smoothedBones[i]);
+                    }
+                }
             }
 
             /// <summary>
@@ -147,11 +157,17 @@ namespace Opsive.UltimateCharacterController.Game
             /// </summary>
             public override void SmoothMove(float interpAmount)
             {
-                if (m_CharacterLocomotion.ManualMove || m_CharacterLocomotion.DisableAnimationInterpolation) {
+                if (m_CharacterLocomotion.ManualMove) {
                     return;
                 }
 
                 base.SmoothMove(interpAmount);
+
+                if (m_SmoothedBones != null) {
+                    for (int i = 0; i < m_SmoothedBones.Length; ++i) {
+                        m_SmoothedBones[i].SmoothMove(interpAmount);
+                    }
+                }
             }
 
             /// <summary>
@@ -163,7 +179,7 @@ namespace Opsive.UltimateCharacterController.Game
                 if (m_CharacterLocomotion.ManualMove != manualMove) {
                     return;
                 }
-
+                 
                 if (m_CharacterHandler != null) {
                     m_DeltaYawRotation = m_CharacterHandler.GetDeltaYawRotation();
                 }
@@ -171,10 +187,79 @@ namespace Opsive.UltimateCharacterController.Game
             }
 
             /// <summary>
+            /// Restores the location back to the fixed location. This will be performed immediately before the object is moved within FixedUpdate.
+            /// </summary>
+            public override void RestoreFixedLocation()
+            {
+                base.RestoreFixedLocation();
+
+                if (m_SmoothedBones != null) {
+                    for (int i = 0; i < m_SmoothedBones.Length; ++i) {
+                        m_SmoothedBones[i].RestoreFixedLocation();
+                    }
+                }
+            }
+
+            /// <summary>
+            /// Assigns the fixed location. This will be performed immediately after the object is moved within FixedUpdate.
+            /// </summary>
+            /// <param name="assignSmoothedBones">Should the character's smoothed bones be assigned?</param>
+            public void AssignFixedLocation(bool assignSmoothedBones)
+            {
+                if (assignSmoothedBones) {
+                    if (m_SmoothedBones != null) {
+                        for (int i = 0; i < m_SmoothedBones.Length; ++i) {
+                            m_SmoothedBones[i].AssignFixedLocation();
+                        }
+                    }
+                } else {
+                    base.AssignFixedLocation();
+                }
+            }
+
+            /// <summary>
+            /// Immediately set the object's position.
+            /// </summary>
+            /// <param name="position">The position of the object.</param>
+            public override void SetPosition(Vector3 position)
+            {
+                base.SetPosition(position);
+
+                // The character's position has been set. Reset the bone location so they will snap into place.
+                if (m_SmoothedBones != null) {
+                    for (int i = 0; i < m_SmoothedBones.Length; ++i) {
+                        m_SmoothedBones[i].SetPosition(m_SmoothedBones[i].Transform.position);
+                    }
+                }
+            }
+
+            /// <summary>
+            /// Immediately set the object's rotation.
+            /// </summary>
+            /// <param name="position">The rotation of the object.</param>
+            public override void SetRotation(Quaternion rotation)
+            {
+                base.SetRotation(rotation);
+
+                // The character's rotation has been set. Reset the bone location so they will snap into place.
+                if (m_SmoothedBones != null) {
+                    for (int i = 0; i < m_SmoothedBones.Length; ++i) {
+                        m_SmoothedBones[i].SetRotation(m_SmoothedBones[i].Transform.rotation);
+                    }
+                }
+            }
+
+            /// <summary>
             /// Stops managing the character.
             /// </summary>
             public void UnregisterCharacter()
             {
+                if (m_SmoothedBones != null) {
+                    for (int i = 0; i < m_SmoothedBones.Length; ++i) {
+                        ObjectPool.Return(m_SmoothedBones[i]);
+                    }
+                    m_SmoothedBones = null;
+                }
                 EventHandler.UnregisterEvent<ILookSource>(m_CharacterLocomotion.gameObject, "OnCharacterAttachLookSource", OnAttachLookSource);
             }
         }
@@ -203,9 +288,9 @@ namespace Opsive.UltimateCharacterController.Game
             /// </summary>
             public void FixedMove()
             {
-                RestoreFixedPosition();
+                RestoreFixedLocation();
                 m_KinematicObject.Move();
-                AssignFixedPosition();
+                AssignFixedLocation();
             }
         }
 
@@ -236,7 +321,7 @@ namespace Opsive.UltimateCharacterController.Game
             /// </summary>
             public void Rotate()
             {
-                RestoreFixedPosition();
+                RestoreFixedLocation();
 
                 m_CameraController.Rotate(m_LookVector.x, m_LookVector.y);
             }
@@ -248,7 +333,7 @@ namespace Opsive.UltimateCharacterController.Game
             {
                 m_CameraController.Move(m_LookVector.x, m_LookVector.y);
 
-                AssignFixedPosition();
+                AssignFixedLocation();
             }
         }
 
@@ -283,6 +368,7 @@ namespace Opsive.UltimateCharacterController.Game
         private int m_CameraCount;
         private int m_KinematicObjectCount;
         private float m_FixedTime;
+        private bool m_FixedUpdate;
 
         /// <summary>
         /// The object has been enabled.
@@ -557,8 +643,15 @@ namespace Opsive.UltimateCharacterController.Game
                 m_Cameras[i].SmoothMove(interpAmount);
             }
             for (int i = 0; i < m_CharacterCount; ++i) {
+                // Update the smoothed bone fixed location after the IK pass has executed. The animator is updated
+                // during the physics loop so the smooth bone locations only need to be assigned after the FixedUpdate
+                // loop has run.
+                if (m_FixedUpdate) {
+                    m_Characters[i].AssignFixedLocation(true);
+                }
                 m_Characters[i].SmoothMove(interpAmount);
             }
+            m_FixedUpdate = false;
         }
 
         /// <summary>
@@ -576,10 +669,16 @@ namespace Opsive.UltimateCharacterController.Game
                     Physics.SyncTransforms();
                 }
                 m_Characters[i].FixedMove(false);
+                // If FixedUpdate is called multiple times before Update then the framerate is low.
+                // Update the position immediately to prevent jittering.
+                if (m_FixedUpdate) {
+                    m_Characters[i].AssignFixedLocation(true);
+                }
             }
 
             // Remember the time so SmoothMove can determine how much interpolation is necessary.
             m_FixedTime = Time.time;
+            m_FixedUpdate = true;
         }
 
         /// <summary>
@@ -627,7 +726,7 @@ namespace Opsive.UltimateCharacterController.Game
                 return;
             }
 
-            m_Characters[characterIndex].RestoreFixedPosition();
+            m_Characters[characterIndex].RestoreFixedLocation();
 
             // If the character has a camera attached the camera should first be rotated.
             int cameraIndex;
@@ -655,7 +754,7 @@ namespace Opsive.UltimateCharacterController.Game
                 return;
             }
 
-            m_Characters[characterIndex].AssignFixedPosition();
+            m_Characters[characterIndex].AssignFixedLocation();
 
             // After the character has updated the camera should update one more time to account for the new character position.
             int cameraIndex;

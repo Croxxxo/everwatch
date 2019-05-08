@@ -139,7 +139,6 @@ namespace Opsive.UltimateCharacterController.Character
         private Dictionary<string, int> m_MovementTypeNameMap = new Dictionary<string, int>();
         private MovementType m_MovementType;
         private bool m_FirstPersonPerspective;
-        private bool m_DisableTransformInterpolation;
         private bool m_Alive;
         private bool m_Aiming;
 
@@ -243,7 +242,6 @@ namespace Opsive.UltimateCharacterController.Character
             }
         }
         [NonSerialized] public bool FirstPersonPerspective { get { return m_FirstPersonPerspective; } set { m_FirstPersonPerspective = value; } }
-        public bool DisableAnimationInterpolation { get { return m_DisableTransformInterpolation; } set { m_DisableTransformInterpolation = value; } }
         public bool Alive { get { return m_Alive; } }
         public float DeltaTime { get { return m_DeltaTime; } }
         public float FramerateDeltaTime { get { return m_FramerateDeltaTime; } }

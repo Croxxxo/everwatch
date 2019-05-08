@@ -135,10 +135,11 @@ namespace Opsive.UltimateCharacterController.Traits
         /// <summary>
         /// Is the attribute currently valid? A valid attribute will not be at the minimum value.
         /// </summary>
+        /// <param name="valueChange">The amount that the attribute is going to change values by.</param>
         /// <returns>True if the attribute value is currently valid.</returns>
-        public bool IsValid()
+        public bool IsValid(float valueChange)
         {
-            return m_Value != m_MinValue;
+            return m_Value + valueChange >= m_MinValue;
         }
 
         /// <summary>
@@ -239,7 +240,7 @@ namespace Opsive.UltimateCharacterController.Traits
                 return true;
             }
 
-            return m_Attribute.IsValid();
+            return m_Attribute.IsValid(m_ValueChange);
         }
 
         /// <summary>

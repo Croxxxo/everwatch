@@ -100,6 +100,8 @@ namespace Opsive.UltimateCharacterController.Character
                 }
             }
 
+            m_Animator.updateMode = AnimatorUpdateMode.AnimatePhysics;
+            m_Animator.applyRootMotion = false;
             enabled = m_CharacterAnimatorMonitor != null;
             if (enabled) {
                 EventHandler.RegisterEvent<bool>(m_Character, "OnCharacterImmediateTransformChange", OnImmediateTransformChange);

@@ -190,7 +190,8 @@ namespace Opsive.UltimateCharacterController.Items.Actions
             }
 
             // The attribute may prevent the item from being used (such as if the character doesn't have enough stamina to use the item).
-            if ((m_UseAttribute != null && !m_UseAttribute.IsValid()) || (m_CharacterUseAttribute != null && !m_CharacterUseAttribute.IsValid())) {
+            if ((m_UseAttribute != null && !m_UseAttribute.IsValid(-m_UseAttributeAmount)) || 
+                (m_CharacterUseAttribute != null && !m_CharacterUseAttribute.IsValid(-m_CharacterUseAttributeAmount))) {
                 return false;
             }
 

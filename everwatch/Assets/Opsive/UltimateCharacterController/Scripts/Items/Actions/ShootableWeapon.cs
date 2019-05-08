@@ -116,7 +116,7 @@ namespace Opsive.UltimateCharacterController.Items.Actions
         [Tooltip("The layer that the projectile should occupy when initially spawned.")]
         [SerializeField] protected int m_ProjectileStartLayer = LayerManager.IgnoreRaycast;
         [Tooltip("The layer that the projectile object should change to after being fired.")]
-        [SerializeField] protected int m_ProjectileFiredLayer = LayerManager.Default;
+        [SerializeField] protected int m_ProjectileFiredLayer = LayerManager.VisualEffect;
         [Tooltip("The amount of time after the object has been fired to change the layer.")]
         [SerializeField] protected float m_LayerChangeDelay = 0.1f;
         [Tooltip("The amount of time after another item has been used that the projectile should be enabled again.")]

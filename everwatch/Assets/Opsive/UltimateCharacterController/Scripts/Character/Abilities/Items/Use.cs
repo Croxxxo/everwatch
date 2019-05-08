@@ -433,7 +433,17 @@ namespace Opsive.UltimateCharacterController.Character.Abilities.Items
         /// </summary>
         protected override void AbilityStarted()
         {
-            base.AbilityStarted(false);
+            // Shootable weapons will deduct the attribute on each use.
+            var enableAttributeModifier = true;
+#if ULTIMATE_CHARACTER_CONTROLLER_SHOOTER
+            for (int i = 0; i < m_UsableItems.Length; ++i) {
+                if (enableAttributeModifier && m_UsableItems[i] != null && m_UsableItems[i] is ShootableWeapon) {
+                    enableAttributeModifier = false;
+                    break;
+                }
+            }
+#endif
+            base.AbilityStarted(enableAttributeModifier);
 
             // The item may require root motion to prevent sliding. It may also require the character to face the target before it can actually be used.
             m_FaceTargetItem = null;
@@ -578,16 +588,18 @@ namespace Opsive.UltimateCharacterController.Character.Abilities.Items
         }
 
         /// <summary>
+        /// Updates the ability.
+        /// </summary>
+        public override void Update()
+        {
+            // Do not call the base method to prevent an attribute from stopping the use.
+        }
+
+        /// <summary>
         /// Updates the ability after the controller has updated. This will ensure the character is in the most up to date position.
         /// </summary>
         public override void LateUpdate()
         {
-            // An attribute may prevent the use from being able to continue.
-            if (m_AttributeModifier != null && !m_AttributeModifier.IsValid()) {
-                StopAbility(true);
-                return;
-            }
-
             // Enable the collision layer so the weapons can apply damage the originating character.
             m_CharacterLocomotion.EnableColliderCollisionLayer(true);
 
@@ -611,10 +623,12 @@ namespace Opsive.UltimateCharacterController.Character.Abilities.Items
                     if (m_UsableItems[i].CanUseItem(this, UsableItem.UseAbilityState.Update)) {
                         m_UsableItems[i].UseItem();
 
+#if ULTIMATE_CHARACTER_CONTROLLER_SHOOTER
                         // Each use should update the attribute.
-                        if (m_AttributeModifier != null) {
+                        if (m_UsableItems[i] is ShootableWeapon && m_AttributeModifier != null) {
                             m_AttributeModifier.EnableModifier(true);
                         }
+#endif
 
                         // Using the item may have killed the character and stopped the ability.
                         if (!IsActive) {

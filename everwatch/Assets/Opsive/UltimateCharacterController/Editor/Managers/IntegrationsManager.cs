@@ -107,7 +107,7 @@ namespace Opsive.UltimateCharacterController.Editor.Managers
                     Application.OpenURL(m_IntegrationURL);
                 }
 
-                if (GUI.Button(new Rect(rect.x, rect.y + (string.IsNullOrEmpty(m_IntegrationURL) ? 23 : 47), 80, 18), "Asset Store")) {
+                if (m_ID > 0 && GUI.Button(new Rect(rect.x, rect.y + (string.IsNullOrEmpty(m_IntegrationURL) ? 23 : 47), 80, 18), "Asset Store")) {
                     Application.OpenURL("https://opsive.com/asset/UltimateCharacterController/AssetRedirect.php?asset=" + m_ID);
                 }
             }

@@ -254,6 +254,7 @@ namespace Opsive.UltimateCharacterController.Editor.Inspectors.Character
 
                 if (Foldout("Movement")) {
                     EditorGUI.indentLevel++;
+                    EditorGUILayout.PropertyField(PropertyFromName("m_SmoothedBones"), true);
                     EditorGUILayout.PropertyField(PropertyFromName("m_MovingStateName"));
                     EditorGUILayout.PropertyField(PropertyFromName("m_AirborneStateName"));
                     var stickToGround = PropertyFromName("m_StickToGround");

@@ -494,7 +494,9 @@ namespace Opsive.UltimateCharacterController.FirstPersonController.Camera.ViewTy
                 }
                 m_Camera.cullingMask &= m_CullingMask;
             } else {
-                m_FirstPersonCamera.gameObject.SetActive(false);
+                if (m_FirstPersonCamera != null) {
+                    m_FirstPersonCamera.gameObject.SetActive(false);
+                }
                 if (firstPersonPerspective) {
                     m_Camera.cullingMask |= ~m_CullingMask;
                 }

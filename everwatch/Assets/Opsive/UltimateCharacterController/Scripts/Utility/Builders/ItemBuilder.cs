@@ -222,6 +222,7 @@ namespace Opsive.UltimateCharacterController.Utility.Builders
                     if ((animator = firstPersonObject.GetComponent<Animator>()) == null) {
                         animator = firstPersonObject.AddComponent<Animator>();
                     }
+                    animator.applyRootMotion = false;
                     animator.updateMode = AnimatorUpdateMode.AnimatePhysics;
                     animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
                     animator.runtimeAnimatorController = firstPersonObjectAnimatorController;
@@ -292,6 +293,7 @@ namespace Opsive.UltimateCharacterController.Utility.Builders
                 if ((animator = firstPersonVisibleItem.GetComponent<Animator>()) == null) {
                     animator = firstPersonVisibleItem.AddComponent<Animator>();
                 }
+                animator.applyRootMotion = false;
                 animator.updateMode = AnimatorUpdateMode.AnimatePhysics;
                 animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
                 animator.runtimeAnimatorController = firstPersonVisibleItemAnimatorController;
@@ -420,6 +422,7 @@ namespace Opsive.UltimateCharacterController.Utility.Builders
                     if ((animator = thirdPersonObject.GetComponent<Animator>()) == null) {
                         animator = thirdPersonObject.AddComponent<Animator>();
                     }
+                    animator.applyRootMotion = false;
                     animator.updateMode = AnimatorUpdateMode.AnimatePhysics;
                     animator.cullingMode = AnimatorCullingMode.AlwaysAnimate;
                     animator.runtimeAnimatorController = thirdPersonObjectAnimatorController;

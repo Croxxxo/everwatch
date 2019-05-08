@@ -2214,7 +2214,7 @@ MonoBehaviour:
   m_ProjectileFireVelocityMagnitude: 40
   m_ProjectileVisibility: 3
   m_ProjectileStartLayer: 2
-  m_ProjectileFiredLayer: 0
+  m_ProjectileFiredLayer: 28
   m_LayerChangeDelay: 0.1
   m_ProjectileEnableDelayAfterOtherUse: 0.4
   m_DryFireItemSubstateParameterValue: 11
@@ -2225,7 +2225,7 @@ MonoBehaviour:
   m_MaxHitscanCollisionCount: 4
   m_ImpactLayers:
     serializedVersion: 2
-    m_Bits: 3758096345
+    m_Bits: 3489660889
   m_DamageAmount: 30
   m_ImpactForce: 2
   m_ImpactForceFrames: 15
@@ -2359,7 +2359,7 @@ MonoBehaviour:
   m_AnimatorMovementSetID: 2
   m_DominantItem: 1
   m_AllowCameraZoom: 1
-  m_DropPrefab: {fileID: 1419454207511548, guid: 9d3bb2387d7f71f4a8bfff96a71fc03b,
+  m_DropPrefab: {fileID: 1419454207511548, guid: 0afb16260211b8b49b53f82b1f3e55dd,
     type: 2}
   m_EquipEvent:
     m_WaitForAnimationEvent: 1

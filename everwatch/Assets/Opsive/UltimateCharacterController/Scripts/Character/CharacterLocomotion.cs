@@ -120,6 +120,9 @@ namespace Opsive.UltimateCharacterController.Character
         [Tooltip("The rate at which the character's moving platform force decelerates when the character is no longer on the platform.")]
         [SerializeField] protected float m_MovingPlatformForceDamping;
 
+        [Tooltip("An array of bones that should be smoothed by the Kinematic Object Manager.")]
+        [SerializeField] protected Transform[] m_SmoothedBones;
+
         public float ColliderSpacing { get { return c_ColliderSpacing; } }
         public float ColliderSpacingSquared { get { return c_ColliderSpacingSquared; } }
         public float SlopeLimitSpacing { get { return c_SlopeLimitSpacing; } }
@@ -162,6 +165,7 @@ namespace Opsive.UltimateCharacterController.Character
         public float MovingPlatformSeperationVelocity { get { return m_MovingPlatformSeperationVelocity; } set { m_MovingPlatformSeperationVelocity = value; } }
         public float MinHorizontalMovingPlatformStickSpeed { get { return m_MinHorizontalMovingPlatformStickSpeed; } set { m_MinHorizontalMovingPlatformStickSpeed = value; } }
         public float MovingPlatformForceDamping { get { return m_MovingPlatformForceDamping; } set { m_MovingPlatformForceDamping = value; } }
+        public Transform[] SmoothedBones { get { return m_SmoothedBones; } }
 
         protected Transform m_Transform;
         private Rigidbody m_Rigidbody;
@@ -304,6 +308,7 @@ namespace Opsive.UltimateCharacterController.Character
             m_PrevPosition = m_Transform.position;
             m_PrevRotation = m_Transform.rotation;
             m_GravityDirection = -m_Up;
+            m_DeltaTime = Time.fixedDeltaTime;
 
             // The Rigidbody is only used to notify Unity that the character isn't static. The Rigidbody doesn't control any movement.
             m_Rigidbody = GetComponent<Rigidbody>();
@@ -1295,7 +1300,9 @@ namespace Opsive.UltimateCharacterController.Character
             m_Platform = platform;
             m_PlatformOverride = m_Platform != null && platformOverride;
             if (m_Platform != null) {
-                var localDirection = m_Transform.InverseTransformDirection(m_GroundRaycastHit.point - m_GroundRaycastOrigin + m_Up * c_ColliderSpacing);
+                var localDirection = (m_Grounded ? 
+                    m_Transform.InverseTransformDirection(m_GroundRaycastHit.point - m_GroundRaycastOrigin + m_Up * c_ColliderSpacing) : 
+                    Vector3.zero);
                 m_PlatformRelativePosition = m_Platform.InverseTransformPoint(m_Transform.position) + localDirection;
                 m_PlatformRotationOffset = m_Transform.rotation * Quaternion.Inverse(m_Platform.rotation);
             } else if (platformOverride) {
@@ -2013,6 +2020,58 @@ namespace Opsive.UltimateCharacterController.Character
 
             m_PrevPosition = m_Transform.position;
             m_MotorThrottle = m_LocalRootMotionForce = m_MoveDirection = m_Velocity = m_ExternalForce = Vector3.zero;
+        }
+
+        /// <summary>
+        /// Resets the variables to the default values.
+        /// </summary>
+        private void Reset()
+        {
+            AddDefaultSmoothedBones();
+        }
+
+        /// <summary>
+        /// Adds the default humanoid smoothed bones.
+        /// </summary>
+        public void AddDefaultSmoothedBones()
+        {
+            var animator = gameObject.GetComponent<Animator>();
+            if (animator == null || !animator.isHuman) {
+                return;
+            }
+
+            // The smoothed bone variable should be populated with all of the humanoid bones.
+            var bones = new List<Transform>();
+            AddBone(bones, animator, HumanBodyBones.Spine);
+            AddBone(bones, animator, HumanBodyBones.Chest);
+            AddBone(bones, animator, HumanBodyBones.Neck);
+            AddBone(bones, animator, HumanBodyBones.Head);
+            AddBone(bones, animator, HumanBodyBones.LeftShoulder);
+            AddBone(bones, animator, HumanBodyBones.LeftUpperArm);
+            AddBone(bones, animator, HumanBodyBones.LeftLowerArm);
+            AddBone(bones, animator, HumanBodyBones.LeftHand);
+            AddBone(bones, animator, HumanBodyBones.RightShoulder);
+            AddBone(bones, animator, HumanBodyBones.RightUpperArm);
+            AddBone(bones, animator, HumanBodyBones.RightLowerArm);
+            AddBone(bones, animator, HumanBodyBones.RightHand);
+
+            if (bones.Count > 0) {
+                m_SmoothedBones = bones.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Adds the bone to the list if the bone exists.
+        /// </summary>
+        /// <param name="bones">The list of current bones.</param>
+        /// <param name="animator">A reference to the character's animator.</param>
+        /// <param name="bone">The humanoid bone that should be added if it exists.</param>
+        private void AddBone(List<Transform> bones, Animator animator, HumanBodyBones bone)
+        {
+            var boneTransform = animator.GetBoneTransform(bone);
+            if (boneTransform != null) {
+                bones.Add(boneTransform);
+            }
         }
     }
 }
