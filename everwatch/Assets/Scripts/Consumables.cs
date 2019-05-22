@@ -2,7 +2,7 @@
 
 public class Consumables : MonoBehaviour
 {
-    public enum ConsumableType {Food, Water};
+    public enum ConsumableType {Food, Water, Health};
     public ConsumableType consumeableType;
     public int restoreAmount;
     public PlayerVitals pv;
@@ -25,11 +25,12 @@ public class Consumables : MonoBehaviour
         if (consumeableType == ConsumableType.Food)
         {
             pv.hunger -= restoreAmount;
-            Destroy(this);
         } else if(consumeableType == ConsumableType.Water)
         {
             pv.thirst -= restoreAmount;
-            Destroy(this);
+        } else if(consumeableType == ConsumableType.Health)
+        {
+            pv.health += restoreAmount;
         }
     }
 }

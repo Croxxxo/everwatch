@@ -5,31 +5,82 @@ public class Inventory : MonoBehaviour
 
     public GameObject inventory;
     public GameObject slotHolder;
+    public GameObject itemManager;
+    private Canvas invCanvas;
+    private bool inventoryEnabled;
+    public bool cursorLocked;
 
     private int slots;
     private Transform[] slot;
+
+    private GameObject itemPickedUp;
+    private bool itemAdded;
 
 
     public void Start()
     {
         slots = slotHolder.transform.childCount;
         slot = new Transform[slots];
+        invCanvas = inventory.GetComponent<Canvas>();
         DetectInventorySlots();
+        cursorLocked = true;
+        Cursor.lockState = CursorLockMode.Locked;
     }
+
+    
 
     public void Update()
     {
-        
+        if (Input.GetKeyDown(KeyCode.I))
+        {
+            inventoryEnabled = !inventoryEnabled;
+            if (cursorLocked)
+            {
+                Cursor.lockState = CursorLockMode.None;
+                cursorLocked = false;
+            }
+            else
+            {
+                Cursor.lockState = CursorLockMode.Locked;
+                cursorLocked = true;
+            }
+        }
+
+        if (inventoryEnabled)
+            invCanvas.enabled = true;
+        else
+            invCanvas.enabled = false;
     }
 
     public void OnTriggerEnter(Collider other)
     {
-        
+        if (other.gameObject.GetComponent<PickUp>())
+        {
+            itemPickedUp = other.gameObject;
+            AddItem(itemPickedUp);
+        }
     }
 
     public void AddItem(GameObject item)
     {
+        for (int i = 0; i < slots; i++)
+        {
+            if (slot[i].GetComponent<Slot>().empty)
+            {
+                slot[i].GetComponent<Slot>().item = itemPickedUp;
+                slot[i].GetComponent<Slot>().itemIcon = itemPickedUp.GetComponent<PickUp>().icon;
 
+                item.transform.parent = itemManager.transform;
+                item.transform.position = itemManager.transform.position;
+
+                if (item.GetComponent<MeshRenderer>())
+                {
+                    item.GetComponent<MeshRenderer>().enabled = false;
+                }
+
+                break;
+            }
+        }
     }
 
     public void DetectInventorySlots()
@@ -37,7 +88,6 @@ public class Inventory : MonoBehaviour
         for (int i = 0; i < slots; i++)
         {
             slot[i] = slotHolder.transform.GetChild(i);
-            print(slot[i].name);
         }
     }
 }

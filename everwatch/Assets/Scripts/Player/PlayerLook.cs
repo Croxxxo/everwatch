@@ -6,6 +6,7 @@ public class PlayerLook : MonoBehaviour
 {
     [SerializeField] private string mouseXInputName, mouseYInputName;
     [SerializeField] private float mouseSensitivity;
+    public Inventory inv;
 
     [SerializeField] private Transform playerBody;
 
@@ -13,18 +14,16 @@ public class PlayerLook : MonoBehaviour
 
     private void Awake()
     {
-        LockCursor();
         xAxisClamp = 0.0f;
     }
 
-    private void LockCursor()
-    {
-        Cursor.lockState = CursorLockMode.Locked;
-    }
 
     private void Update()
     {
-        CameraRotation();
+        if (inv.cursorLocked)
+        {
+            CameraRotation();
+        }
     }
 
     private void CameraRotation()
