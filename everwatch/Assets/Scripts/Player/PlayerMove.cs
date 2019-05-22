@@ -6,13 +6,21 @@ public class PlayerMove : MonoBehaviour
 {
     [SerializeField] private string horizontalInputName;
     [SerializeField] private string verticalInputName;
+    [SerializeField] private float normalMovementSpeed;
     [SerializeField] private float movementSpeed;
+    [SerializeField] private float runSpeed;
+    [SerializeField] private float stamina;
+    [SerializeField] private float staminaDecreaseRate;
+    [SerializeField] private float staminaIncreaseRate;
+    [SerializeField] private bool isRunning;
 
     private CharacterController charController;
 
     [SerializeField] private AnimationCurve jumpFallOff;
     [SerializeField] private float jumpMultiplier;
     [SerializeField] private KeyCode jumpKey;
+    [SerializeField] private KeyCode runKey;
+
 
     private bool isJumping;
 
@@ -25,10 +33,38 @@ public class PlayerMove : MonoBehaviour
     {
         PlayerMovement();
         JumpInput();
+
+        if (isRunning)
+        {
+            stamina -= staminaDecreaseRate;
+        } else if (!isRunning && stamina < 100)
+        {
+            stamina += staminaIncreaseRate;
+        }
+
+        if(stamina > 100)
+        {
+            stamina = 100;
+        }
     }
 
     private void PlayerMovement()
     {
+        if (Input.GetKeyDown(runKey) && stamina > 0)
+        {
+            movementSpeed = runSpeed;
+            isRunning = true;
+            if(stamina < 0)
+            {
+                movementSpeed = normalMovementSpeed;
+                isRunning = false;
+            }
+        }
+        if (Input.GetKeyUp(runKey))
+        {
+            movementSpeed = normalMovementSpeed;
+            isRunning = false;
+        }
         float horizInput = Input.GetAxis(horizontalInputName) * movementSpeed;
         float vertInput = Input.GetAxis(verticalInputName) * movementSpeed;
 
