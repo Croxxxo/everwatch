@@ -833,5 +833,10 @@ PrefabInstance:
       propertyPath: slotHolder
       value: 
       objectReference: {fileID: 478110105}
+    - target: {fileID: 7029268528263947963, guid: d0f999aa78425fe478baa06949dbbbf7,
+        type: 3}
+      propertyPath: isRunning
+      value: 0
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: d0f999aa78425fe478baa06949dbbbf7, type: 3}
