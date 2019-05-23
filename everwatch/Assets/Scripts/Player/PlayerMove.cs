@@ -34,7 +34,7 @@ public class PlayerMove : MonoBehaviour
         PlayerMovement();
         JumpInput();
 
-        if (isRunning)
+        if (isRunning && stamina > 0)
         {
             stamina -= staminaDecreaseRate;
         } else if (!isRunning && stamina < 100)
@@ -45,6 +45,11 @@ public class PlayerMove : MonoBehaviour
         if(stamina > 100)
         {
             stamina = 100;
+        } else if(stamina <= 0)
+        {
+            isRunning = false;
+            movementSpeed = normalMovementSpeed;
+            stamina = 0;
         }
     }
 
@@ -54,11 +59,6 @@ public class PlayerMove : MonoBehaviour
         {
             movementSpeed = runSpeed;
             isRunning = true;
-            if(stamina < 0)
-            {
-                movementSpeed = normalMovementSpeed;
-                isRunning = false;
-            }
         }
         if (Input.GetKeyUp(runKey))
         {
