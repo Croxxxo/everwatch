@@ -15,6 +15,7 @@ public class Inventory : MonoBehaviour
 
     private GameObject itemPickedUp;
     private bool itemAdded;
+    public bool weaponEquipped;
 
 
     public void Start()
@@ -54,7 +55,7 @@ public class Inventory : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.GetComponent<PickUp>())
+        if (other.gameObject.GetComponent<PickUp>() && other.GetComponent<PickUp>().pickedUp == false)
         {
             itemPickedUp = other.gameObject;
             AddItem(itemPickedUp);
@@ -73,11 +74,13 @@ public class Inventory : MonoBehaviour
                 item.transform.parent = itemManager.transform;
                 item.transform.position = itemManager.transform.position;
 
-                if (item.GetComponent<MeshRenderer>())
-                {
-                    item.GetComponent<MeshRenderer>().enabled = false;
-                }
+                item.transform.localPosition = item.GetComponent<PickUp>().position;
+                item.transform.localEulerAngles = item.GetComponent<PickUp>().rotation;
+                item.transform.localScale = item.GetComponent<PickUp>().scale;
+                
 
+                item.GetComponent<PickUp>().pickedUp = true;
+                item.SetActive(false);
                 break;
             }
         }

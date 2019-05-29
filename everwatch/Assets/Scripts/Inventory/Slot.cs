@@ -5,16 +5,17 @@ using UnityEngine.UI;
 public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
 
-    private bool hovered;
+    public bool hovered;
     public bool empty;
 
     public GameObject item;
     public Texture itemIcon;
-
+    public Player player;
 
     private void Awake()
     {
         empty = true;
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<Player>();
     }
 
     private void Update()
@@ -46,17 +47,28 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
     public void OnPointerClick(PointerEventData eventData)
     {
+        print("clicked");
         if (item)
         {
             PickUp thisItem = item.GetComponent<PickUp>();
 
-            if (item.GetComponent<Consumables>())
+            if (thisItem.pickUpType == PickUp.PickUpType.consumable)
             {
                 item.GetComponent<Consumables>().EatItem();
                 Destroy(item);
-                print("eat");
+            }
+
+            if(thisItem.pickUpType == PickUp.PickUpType.weapon && !player.weaponEquipped)
+            {
+                thisItem.equipped = true;
+                item.SetActive(true);
+                player.weaponEquipped = true;
+            } else if(thisItem.pickUpType == PickUp.PickUpType.weapon && player.weaponEquipped)
+            {
+                thisItem.equipped = false;
+                item.SetActive(false);
+                player.weaponEquipped = false;
             }
         }
-        print("clicked");
     }
 }
