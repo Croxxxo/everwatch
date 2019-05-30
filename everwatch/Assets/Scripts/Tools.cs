@@ -22,7 +22,8 @@ public class Tools : MonoBehaviour
         {
             if(Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, range))
             {
-
+                if(hit.transform.gameObject)
+                print(hit.transform.name);
             }
 
         }

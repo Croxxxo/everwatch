@@ -20,9 +20,10 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
 
     private void Update()
     {
+        print("script is loaded");
         if (item) {
-            empty = false;
 
+            empty = false;
             itemIcon = item.GetComponent<PickUp>().icon;
             this.GetComponent<RawImage>().texture = itemIcon;
         }
@@ -37,11 +38,13 @@ public class Slot : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IP
     }
     public void OnPointerEnter(PointerEventData eventData)
     {
+        Debug.Log("pointer enter");
         hovered = true;
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
+        Debug.Log("pointer exit");
         hovered = false;
     }
 
