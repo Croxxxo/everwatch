@@ -58,6 +58,10 @@ public class Inventory : MonoBehaviour
         if (other.gameObject.GetComponent<PickUp>() && other.GetComponent<PickUp>().pickedUp == false)
         {
             itemPickedUp = other.gameObject;
+            if (itemPickedUp.CompareTag("Stump"))
+            {
+                itemPickedUp.GetComponentInParent<Tree>().StartTreePlant();
+            }
             AddItem(itemPickedUp);
         }
     }

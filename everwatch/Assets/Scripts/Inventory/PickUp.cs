@@ -4,7 +4,7 @@ public class PickUp : MonoBehaviour
 {
 
     public Texture icon;
-    public enum PickUpType {consumable, weapon};
+    public enum PickUpType {consumable, weapon, material};
     public PickUpType pickUpType;
 
     public Vector3 position;
