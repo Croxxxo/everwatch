@@ -41,6 +41,10 @@ public class WanderAIEvil : MonoBehaviour
         {
             transform.position += transform.forward * moveSpeed * Time.deltaTime;
         }
+        if(isChasing && !isWandering)
+        {
+            ChasePlayer();
+        }
     }
 
     IEnumerator Wander()
@@ -75,20 +79,15 @@ public class WanderAIEvil : MonoBehaviour
 
     private void ChasePlayer()
     {
-        while (isChasing)
-        {
-            transform.rotation = Quaternion.Slerp(transform.rotation
-                        , Quaternion.LookRotation(tr_Player.position - transform.position)
-                        , rotSpeed * Time.deltaTime);
+        transform.rotation = Quaternion.Slerp(transform.rotation, 
+            Quaternion.LookRotation(tr_Player.position - transform.position), 
+            rotSpeed * Time.deltaTime);
 
-            transform.position += transform.position * moveSpeed * Time.deltaTime;
-        }
+        transform.position += transform.position * moveSpeed * Time.deltaTime;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("object entered");
-        Debug.Log(other.transform.tag);
         if (other.gameObject.CompareTag("Player"))
         {
             Debug.Log("player entered");
@@ -100,8 +99,6 @@ public class WanderAIEvil : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        Debug.Log("object exited");
-        Debug.Log(other.transform.tag);
         if (other.gameObject.CompareTag("Player"))
         {
             Debug.Log("player exited");
