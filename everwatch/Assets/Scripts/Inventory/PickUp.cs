@@ -13,6 +13,7 @@ public class PickUp : MonoBehaviour
 
     public bool pickedUp;
     public bool equipped;
+    public bool stackable;
 
 
 }

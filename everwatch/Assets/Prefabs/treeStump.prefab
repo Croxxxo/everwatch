@@ -113,3 +113,4 @@ MonoBehaviour:
   scale: {x: 0, y: 0, z: 0}
   pickedUp: 0
   equipped: 0
+  stackable: 1

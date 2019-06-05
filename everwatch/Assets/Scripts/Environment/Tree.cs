@@ -10,13 +10,10 @@ public class Tree : MonoBehaviour
     private Inventory inventory;
     [SerializeField] private GameObject stump;
     [SerializeField] private GameObject newStump;
-    [SerializeField] private GameObject wood;
 
     private void Start()
     {
-        maxHealth = 100;
         health = maxHealth;
-        growTime = 5;
 
         player = GameObject.FindGameObjectWithTag("Player");
         inventory = player.GetComponent<Inventory>();
