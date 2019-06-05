@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class WanderAIEvil : MonoBehaviour
 {
+    Transform tr_Player;
 
     public float moveSpeed = 3f;
     public float rotSpeed = 100f;
@@ -12,17 +13,19 @@ public class WanderAIEvil : MonoBehaviour
     private bool isRotatingLeft = false;
     private bool isRotatingRight = false;
     private bool isWalking = false;
+    private bool isChasing = false;
+
 
     // Start is called before the first frame update
     void Start()
     {
-
+        tr_Player = GameObject.FindGameObjectWithTag("Player").transform;
     }
 
     // Update is called once per frame
     void Update()
     {
-        if (isWandering == false)
+        if (isWandering == false && isChasing == false)
         {
             StartCoroutine(Wander());
         }
@@ -68,5 +71,42 @@ public class WanderAIEvil : MonoBehaviour
             isRotatingLeft = false;
         }
         isWandering = false;
+    }
+
+    private void ChasePlayer()
+    {
+        while (isChasing)
+        {
+            transform.rotation = Quaternion.Slerp(transform.rotation
+                        , Quaternion.LookRotation(tr_Player.position - transform.position)
+                        , rotSpeed * Time.deltaTime);
+
+            transform.position += transform.position * moveSpeed * Time.deltaTime;
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("object entered");
+        Debug.Log(other.transform.tag);
+        if (other.gameObject.CompareTag("Player"))
+        {
+            Debug.Log("player entered");
+            isChasing = true;
+            isWandering = false;
+            ChasePlayer();
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        Debug.Log("object exited");
+        Debug.Log(other.transform.tag);
+        if (other.gameObject.CompareTag("Player"))
+        {
+            Debug.Log("player exited");
+            isChasing = false;
+            isWandering = true;
+        }
     }
 }
