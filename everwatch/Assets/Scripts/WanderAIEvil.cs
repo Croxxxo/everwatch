@@ -9,6 +9,8 @@ public class WanderAIEvil : MonoBehaviour
     public float moveSpeed = 3f;
     public float rotSpeed = 100f;
 
+    private float otherrotSpeed = 3f;
+
     private bool isWandering = false;
     private bool isRotatingLeft = false;
     private bool isRotatingRight = false;
@@ -28,6 +30,7 @@ public class WanderAIEvil : MonoBehaviour
         if (isWandering == false && isChasing == false)
         {
             StartCoroutine(Wander());
+            Debug.Log("Wandering");
         }
         if (isRotatingRight == true)
         {
@@ -49,6 +52,7 @@ public class WanderAIEvil : MonoBehaviour
 
     IEnumerator Wander()
     {
+
         int rotTime = Random.Range(1, 3);
         int rotateWait = Random.Range(1, 3);
         int rotateLorR = Random.Range(0, 3);
@@ -81,9 +85,9 @@ public class WanderAIEvil : MonoBehaviour
     {
         transform.rotation = Quaternion.Slerp(transform.rotation, 
             Quaternion.LookRotation(tr_Player.position - transform.position), 
-            rotSpeed * Time.deltaTime);
+            otherrotSpeed * Time.deltaTime);
 
-        transform.position += transform.position * moveSpeed * Time.deltaTime;
+        transform.position += transform.forward * moveSpeed * Time.deltaTime;
     }
 
     private void OnTriggerEnter(Collider other)
@@ -103,7 +107,8 @@ public class WanderAIEvil : MonoBehaviour
         {
             Debug.Log("player exited");
             isChasing = false;
-            isWandering = true;
+            transform.rotation = Quaternion.Euler(0, 0, 0);
+            StartCoroutine(Wander());
         }
     }
 }
