@@ -1,14 +1,14 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class Tools : MonoBehaviour
 {
     public enum ToolType {axe, pickaxe};
     public ToolType toolType;
-    public int range;
+    [SerializeField] private int range;
+    [SerializeField] private int damage;
     public Camera cam;
-    public PickUp pickUp;
+    private PickUp pickUp;
+
 
     public void Start()
     {
@@ -22,8 +22,14 @@ public class Tools : MonoBehaviour
         {
             if(Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, range))
             {
-                if(hit.transform.gameObject)
-                print(hit.transform.name);
+                if (hit.transform.gameObject.GetComponent<Tree>() && toolType == ToolType.axe)
+                {
+                    hit.transform.gameObject.GetComponent<Tree>().TakeDamage(damage);
+                    print("that's a tree!");
+                } else if(hit.transform.gameObject.GetComponent<Rock>() && toolType == ToolType.pickaxe)
+                {
+                    hit.transform.gameObject.GetComponent<Rock>().TakeDamage(damage);
+                }
             }
 
         }
