@@ -75,7 +75,7 @@ public class Inventory : MonoBehaviour
     {
         for (int i = 0; i < slots; i++)
         {
-            if(slot[i].GetComponent<Slot>().itemHolding == itemPickedUp.transform.name && slot[i].GetComponent<Slot>().numberOfItems < slot[i].GetComponent<Slot>().maxNumberOfItems)
+            if(slot[i].GetComponent<Slot>().itemHolding == itemPickedUp.transform.name && slot[i].GetComponent<Slot>().numberOfItems < slot[i].GetComponent<Slot>().maxNumberOfItems && item.GetComponent<PickUp>().stackable)
             {
                 slot[i].GetComponent<Slot>().numberOfItems++;
                 itemAmount = slot[i].GetComponentInChildren<TextMeshProUGUI>();
