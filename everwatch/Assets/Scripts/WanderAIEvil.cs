@@ -17,11 +17,14 @@ public class WanderAIEvil : MonoBehaviour
     private bool isWalking = false;
     private bool isChasing = false;
 
+    public Rigidbody rb;
 
     // Start is called before the first frame update
     void Start()
     {
         tr_Player = GameObject.FindGameObjectWithTag("Player").transform;
+
+        Rigidbody rb = GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
@@ -88,6 +91,7 @@ public class WanderAIEvil : MonoBehaviour
             otherrotSpeed * Time.deltaTime);
 
         transform.position += transform.forward * moveSpeed * Time.deltaTime;
+        Debug.Log("chasing player");
     }
 
     private void OnTriggerEnter(Collider other)
@@ -105,9 +109,11 @@ public class WanderAIEvil : MonoBehaviour
     {
         if (other.gameObject.CompareTag("Player"))
         {
-            Debug.Log("player exited");
             isChasing = false;
+            rb.velocity = new Vector3(0, 0, 0);
+            rb.angularVelocity = new Vector3(0, 0, 0);
             transform.rotation = Quaternion.Euler(0, 0, 0);
+            Debug.Log("standing back up");
             StartCoroutine(Wander());
         }
     }
