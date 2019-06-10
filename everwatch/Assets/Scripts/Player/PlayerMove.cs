@@ -8,7 +8,7 @@ public class PlayerMove : MonoBehaviour
     [SerializeField] private float normalMovementSpeed;
     [SerializeField] private float movementSpeed;
     [SerializeField] private float runSpeed;
-    [SerializeField] private float stamina;
+    public float stamina;
     [SerializeField] private float staminaDecreaseRate;
     [SerializeField] private float staminaIncreaseRate;
     [SerializeField] private bool isRunning;
