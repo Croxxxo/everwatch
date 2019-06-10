@@ -144,5 +144,6 @@ public class WanderAIEvil : MonoBehaviour
         yield return new WaitForSeconds(attackSpeed);
         attacking = false;
         canAttack = true;
+        //nicholas is a sexy man
     }
 }
