@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using TMPro;
 
 public class Inventory : MonoBehaviour
 {
@@ -10,6 +11,7 @@ public class Inventory : MonoBehaviour
     private bool inventoryEnabled;
     public bool cursorLocked;
 
+    private TextMeshProUGUI itemAmount;
     private int slots;
     private Transform[] slot;
 
@@ -58,6 +60,13 @@ public class Inventory : MonoBehaviour
         if (other.gameObject.GetComponent<PickUp>() && other.GetComponent<PickUp>().pickedUp == false)
         {
             itemPickedUp = other.gameObject;
+            if (itemPickedUp.CompareTag("Stump"))
+            {
+                itemPickedUp.GetComponentInParent<Tree>().StartTreePlant();
+            } else if (itemPickedUp.CompareTag("Stone"))
+            {
+                itemPickedUp.GetComponentInParent<Rock>().StartRockRespawn();
+            }
             AddItem(itemPickedUp);
         }
     }
@@ -66,10 +75,21 @@ public class Inventory : MonoBehaviour
     {
         for (int i = 0; i < slots; i++)
         {
+            if(slot[i].GetComponent<Slot>().itemHolding == itemPickedUp.transform.name && slot[i].GetComponent<Slot>().numberOfItems < slot[i].GetComponent<Slot>().maxNumberOfItems)
+            {
+                slot[i].GetComponent<Slot>().numberOfItems++;
+                itemAmount = slot[i].GetComponentInChildren<TextMeshProUGUI>();
+                itemAmount.text = slot[i].GetComponent<Slot>().numberOfItems.ToString();
+                Destroy(item);
+                break;
+            }
+
             if (slot[i].GetComponent<Slot>().empty)
             {
                 slot[i].GetComponent<Slot>().item = itemPickedUp;
                 slot[i].GetComponent<Slot>().itemIcon = itemPickedUp.GetComponent<PickUp>().icon;
+                slot[i].GetComponent<Slot>().itemHolding = item.transform.name;
+                slot[i].GetComponent<Slot>().numberOfItems++;
 
                 item.transform.parent = itemManager.transform;
                 item.transform.position = itemManager.transform.position;

@@ -13,7 +13,6 @@ public class Tools : MonoBehaviour
     public void Start()
     {
         pickUp = gameObject.GetComponent<PickUp>();
-        damage = 10;
     }
     public void Update()
     {
@@ -27,6 +26,9 @@ public class Tools : MonoBehaviour
                 {
                     hit.transform.gameObject.GetComponent<Tree>().TakeDamage(damage);
                     print("that's a tree!");
+                } else if(hit.transform.gameObject.GetComponent<Rock>() && toolType == ToolType.pickaxe)
+                {
+                    hit.transform.gameObject.GetComponent<Rock>().TakeDamage(damage);
                 }
             }
 

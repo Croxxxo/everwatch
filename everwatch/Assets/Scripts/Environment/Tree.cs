@@ -8,13 +8,12 @@ public class Tree : MonoBehaviour
     [SerializeField] private int growTime;
     private GameObject player;
     private Inventory inventory;
-    [SerializeField] private GameObject wood;
+    [SerializeField] private GameObject stump;
+    [SerializeField] private GameObject newStump;
 
     private void Start()
     {
-        maxHealth = 100;
         health = maxHealth;
-        growTime = 5;
 
         player = GameObject.FindGameObjectWithTag("Player");
         inventory = player.GetComponent<Inventory>();
@@ -31,14 +30,17 @@ public class Tree : MonoBehaviour
 
     private void DestroyTree()
     {
-        StartCoroutine(PlantTree());
         gameObject.GetComponent<CapsuleCollider>().enabled = false;
         gameObject.GetComponent<MeshRenderer>().enabled = false;
 
-        inventory.AddItem(wood);
+        newStump = Instantiate(stump, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity);
+        newStump.transform.SetParent(gameObject.transform);
     }
-
-    IEnumerator PlantTree()
+    public void StartTreePlant()
+    {
+        StartCoroutine(PlantTree());
+    }
+    public IEnumerator PlantTree()
     {
         yield return new WaitForSeconds(growTime);
         gameObject.GetComponent<CapsuleCollider>().enabled = true;
