@@ -1,6 +1,5 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerVitals : MonoBehaviour
 {
@@ -11,12 +10,18 @@ public class PlayerVitals : MonoBehaviour
     public float health, thirst, hunger;
     public float hungerIncreaseRate, thirstIncreaseRate;
     public float healthDecreaseRate;
+    [SerializeField] private Slider healthSlider;
+    [SerializeField] private Slider staminaSlider;
+    [SerializeField] private Slider hungerSlider;
+    [SerializeField] private Slider thirstSlider;
+    private PlayerMove pm;
 
 
 
     public void Start()
     {
         health = maxHealth;
+        pm = GetComponent<PlayerMove>();
     }
 
     public void Update()
@@ -27,6 +32,11 @@ public class PlayerVitals : MonoBehaviour
         if (hunger < maxHunger)
             hunger += hungerIncreaseRate * Time.deltaTime;
 
+
+        healthSlider.value = health / maxHealth;
+        staminaSlider.value = pm.stamina / 100;
+        hungerSlider.value = hunger / maxHunger;
+        thirstSlider.value = thirst / maxThirst;
 
 
         //Calculating the health decrease rate
