@@ -11,6 +11,7 @@ public class Inventory : MonoBehaviour
     private bool inventoryEnabled;
     public bool cursorLocked;
 
+    private PlayerVitals pv;
     private TextMeshProUGUI itemAmount;
     private int slots;
     private Transform[] slot;
@@ -28,6 +29,8 @@ public class Inventory : MonoBehaviour
         DetectInventorySlots();
         cursorLocked = true;
         Cursor.lockState = CursorLockMode.Locked;
+
+        pv = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerVitals>();
     }
 
     
@@ -47,6 +50,12 @@ public class Inventory : MonoBehaviour
                 Cursor.lockState = CursorLockMode.Locked;
                 cursorLocked = true;
             }
+        }
+
+        if(pv.health <= 0)
+        {
+            Cursor.lockState = CursorLockMode.None;
+            cursorLocked = false;
         }
 
         if (inventoryEnabled)

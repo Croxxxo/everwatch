@@ -8,10 +8,14 @@ public class WanderAI : MonoBehaviour
     public float moveSpeed = 3f;
     public float rotSpeed = 100f;
 
+    public GameObject food;
+    public GameObject water;
+
     private bool isWandering = false;
     private bool isRotatingLeft = false;
     private bool isRotatingRight = false;
     private bool isWalking = false;
+    public int health;
 
     // Start is called before the first frame update
     void Start()
@@ -38,6 +42,18 @@ public class WanderAI : MonoBehaviour
         {
             transform.position += transform.forward * moveSpeed * Time.deltaTime;
         }
+
+        if(health <= 0)
+        {
+            Instantiate(food, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity);
+            Instantiate(water, new Vector3(transform.position.x + 3, transform.position.y, transform.position.z), Quaternion.identity);
+            Destroy(gameObject);
+        }
+    }
+
+    public void takeDamage(int damage)
+    {
+        health -= damage;
     }
 
     IEnumerator Wander()

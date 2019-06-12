@@ -10,6 +10,7 @@ public class WanderAIEvil : MonoBehaviour
     public float rotSpeed = 100f;
     [SerializeField] private int damage;
     [SerializeField] private float attackSpeed;
+    public int health;
 
     private float otherrotSpeed = 3f;
 
@@ -58,6 +59,11 @@ public class WanderAIEvil : MonoBehaviour
         {
             ChasePlayer();
         }
+    }
+
+    public void takeDamage(int damage)
+    {
+        health -= damage;
     }
 
     public void OnCollisionStay(Collision collision)

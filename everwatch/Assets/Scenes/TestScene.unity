@@ -316,7 +316,7 @@ RectTransform:
   - {fileID: 1112559771}
   - {fileID: 478110106}
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
@@ -510,7 +510,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 2
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 50, y: -30, z: 0}
 --- !u!1 &86489226
 GameObject:
@@ -874,6 +874,7 @@ GameObject:
   - component: {fileID: 500245960}
   - component: {fileID: 500245959}
   - component: {fileID: 500245963}
+  - component: {fileID: 500245964}
   m_Layer: 0
   m_Name: Plane
   m_TagString: Untagged
@@ -952,7 +953,7 @@ Transform:
   m_LocalScale: {x: 10, y: 10, z: 10}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 4
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &500245963
 MonoBehaviour:
@@ -966,11 +967,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d2a81ff4333c230468e3baa393d5ea41, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  theEnemy: {fileID: 4121505038164514717, guid: b1cf7b8d1e95e6046b50f6bafc22363b,
+  theEnemy: {fileID: 3855490760329047370, guid: b1cf7b8d1e95e6046b50f6bafc22363b,
     type: 3}
   xPos: 0
   zPos: 0
   enemyCount: 0
+--- !u!114 &500245964
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 500245958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33f72e58905d61846b1737913718384a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  thePassive: {fileID: 8882512008646269984, guid: de35a808286fe1044878932ccab1210f,
+    type: 3}
+  xPos: 0
+  zPos: 0
+  passiveCount: 0
 --- !u!1 &585844484
 GameObject:
   m_ObjectHideFlags: 0
@@ -1427,7 +1445,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 3
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &940133117
 GameObject:
@@ -2632,7 +2650,7 @@ PrefabInstance:
     - target: {fileID: 829360628464885792, guid: d0f999aa78425fe478baa06949dbbbf7,
         type: 3}
       propertyPath: m_RootOrder
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 829360628464885792, guid: d0f999aa78425fe478baa06949dbbbf7,
         type: 3}
@@ -2672,6 +2690,16 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: EvilWanderer
+      objectReference: {fileID: 0}
+    - target: {fileID: 8069784860893742735, guid: b1cf7b8d1e95e6046b50f6bafc22363b,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8069784860893742735, guid: b1cf7b8d1e95e6046b50f6bafc22363b,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -9.29
       objectReference: {fileID: 0}
     - target: {fileID: 4121505038164514722, guid: b1cf7b8d1e95e6046b50f6bafc22363b,
         type: 3}
