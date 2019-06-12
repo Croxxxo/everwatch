@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class PlayerVitals : MonoBehaviour
 {
@@ -26,6 +27,8 @@ public class PlayerVitals : MonoBehaviour
 
     public void Update()
     {
+        if (health <= 0)
+            SceneManager.LoadScene("DeadScene");
         //Decrease thirst & hunger
         if (thirst < maxThirst)
             thirst += thirstIncreaseRate * Time.deltaTime;

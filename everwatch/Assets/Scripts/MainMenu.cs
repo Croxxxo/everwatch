@@ -15,6 +15,11 @@ public class MainMenu : MonoBehaviour
         SceneManager.LoadScene("Settings");
     }
 
+    public void MenuScene()
+    {
+        SceneManager.LoadScene("MenuScene");
+    }
+
     public void HowToPlay ()
     {
         SceneManager.LoadScene("HowToPlay");
@@ -24,5 +29,10 @@ public class MainMenu : MonoBehaviour
     {
         Application.Quit();
         Debug.Log("QUIT!");
+    }
+
+    public void Restart ()
+    {
+        SceneManager.LoadScene("MenuScene");
     }
 }
