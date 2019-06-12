@@ -123,6 +123,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 3
   rotSpeed: 100
+  damage: 10
+  attackSpeed: 2
+  health: 100
   rb: {fileID: 3941519946438719986}
 --- !u!54 &3941519946438719986
 Rigidbody:

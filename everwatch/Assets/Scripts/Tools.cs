@@ -41,6 +41,17 @@ public class Tools : MonoBehaviour
                 {
                     hit.transform.gameObject.GetComponent<Rock>().TakeDamage(damage);
                 }
+                else if(hit.transform.gameObject.CompareTag("Animal") && toolType == ToolType.hammer)
+                {
+                    if (hit.transform.gameObject.GetComponent<WanderAIEvil>())
+                    {
+                        hit.transform.gameObject.GetComponent<WanderAIEvil>().takeDamage(damage);
+                    }
+                    else if (hit.transform.gameObject.GetComponent<WanderAI>())
+                    {
+
+                    }
+                }
 
                 useCooldown = cooldownAmount;
             }

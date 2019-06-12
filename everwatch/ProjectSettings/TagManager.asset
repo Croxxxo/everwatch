@@ -8,6 +8,7 @@ TagManager:
   - Stump
   - Rock
   - Stone
+  - Animal
   layers:
   - Default
   - TransparentFX
