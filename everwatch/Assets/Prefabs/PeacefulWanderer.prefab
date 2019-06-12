@@ -123,3 +123,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveSpeed: 3
   rotSpeed: 100
+  food: {fileID: 4176314104967980094, guid: a63bde2d0aa38fd41a9297c812ea66df, type: 3}
+  water: {fileID: 1079460933591552233, guid: ed63282163f42654093cd3364d98502e, type: 3}
+  health: 100

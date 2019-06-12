@@ -45,8 +45,9 @@ public class WanderAI : MonoBehaviour
 
         if(health <= 0)
         {
-            Instantiate(food);
-            Instantiate(water);
+            Instantiate(food, new Vector3(transform.position.x, transform.position.y, transform.position.z), Quaternion.identity);
+            Instantiate(water, new Vector3(transform.position.x + 3, transform.position.y, transform.position.z), Quaternion.identity);
+            Destroy(gameObject);
         }
     }
 

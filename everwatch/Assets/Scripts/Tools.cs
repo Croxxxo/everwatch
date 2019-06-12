@@ -49,7 +49,7 @@ public class Tools : MonoBehaviour
                     }
                     else if (hit.transform.gameObject.GetComponent<WanderAI>())
                     {
-
+                        hit.transform.gameObject.GetComponent<WanderAI>().takeDamage(damage);
                     }
                 }
 
