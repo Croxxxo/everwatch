@@ -16,12 +16,12 @@ public class MobSpawn : MonoBehaviour
 
     IEnumerator PassiveDrop()
     {
-        while (passiveCount < 10)
+        while (passiveCount < 76)
         {
-            xPos = Random.Range(-20, 320);
-            zPos = Random.Range(-20, 20);
-            Instantiate(thePassive, new Vector3(xPos, 1, zPos), Quaternion.identity);
-            yield return new WaitForSeconds(0.1f);
+            xPos = Random.Range(-800, 1600);
+            zPos = Random.Range(-800, 1600);
+            Instantiate(thePassive, new Vector3(xPos, 200, zPos), Quaternion.identity);
+            yield return new WaitForSeconds(2f);
             passiveCount += 1;
         }
     }
